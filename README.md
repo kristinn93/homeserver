@@ -14,5 +14,9 @@ Trying to simplify my current setup.
 Create a folder where all of the config for the docker images will be stored, something like `~/homserverconfig`
 
 ```bash
-export HOMESERVERBASEPATH="~/homserverconfig"
+export HOMESERVERBASEPATH="~/homeserverconfig"
+export HOMESERVERDOWNLOADPATH="/mnt/media/downloads"
+export HOMESERVERMEDIAPATH="/mnt/media"
+export HOMESERVERMOVIEPATH="/mnt/media/movies"
+export HOMESERVERTVPATH="/mnt/media/tv"
 ```

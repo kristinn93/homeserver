@@ -1,0 +1,234 @@
+version: "3.8"
+services:
+  Heimdall:
+    container_name: Heimdall
+    entrypoint:
+      - /init
+    environment:
+      - PGID=1000
+      - PUID=1000
+      - TZ=Atlantic/Reykjavik
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - 'PS1=$(whoami)@$(hostname):$(pwd)\$ '
+      - HOME=/root
+      - TERM=xterm
+      - S6_BEHAVIOUR_IF_STAGE2_FAILS=2
+    hostname: heimdall
+    image: linuxserver/heimdall:latest
+    ipc: shareable
+    ports:
+      - 8442:80/tcp
+    restart: always
+    volumes:
+      - ${HOMESERVERBASEPATH}/heimdall/config:/config
+  Jackett:
+    container_name: Jackett
+    entrypoint:
+      - /init
+    environment:
+      - TX=Atlantic/Reykjavik
+      - PGID=1001
+      - PUID=1001
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - HOME=/root
+      - LANGUAGE=en_US.UTF-8
+      - LANG=en_US.UTF-8
+      - TERM=xterm
+      - XDG_DATA_HOME=/config
+      - XDG_CONFIG_HOME=/config
+    hostname: jackett
+    image: linuxserver/jackett:latest
+    ipc: shareable
+    ports:
+      - 9117:9117/tcp
+    restart: always
+    volumes:
+      - ${HOMESERVERBASEPATH}/jackett:/config
+      - ${HOMESERVERDOWNLOADPATH}:/downloads
+  Ombi:
+    container_name: Ombi
+    entrypoint:
+      - /init
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Atlantic/Reykjavik
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - HOME=/config
+      - LANGUAGE=en_US.UTF-8
+      - LANG=en_US.UTF-8
+      - TERM=xterm
+    hostname: ombi
+    image: linuxserver/ombi:latest
+    ipc: shareable
+    ports:
+      - 3579:3579/tcp
+    restart: always
+    volumes:
+      - ${HOMESERVERBASEPATH}/ombi:/config
+  Radarr:
+    container_name: Radarr
+    entrypoint:
+      - /init
+    environment:
+      - PGID=1001
+      - PGUID=1001
+      - TZ=Atlantic/Reykjavik
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - HOME=/root
+      - LANGUAGE=en_US.UTF-8
+      - LANG=en_US.UTF-8
+      - TERM=xterm
+      - XDG_CONFIG_HOME=/config/xdg
+    hostname: radarr
+    image: linuxserver/radarr:latest
+    ipc: shareable
+    ports:
+      - 7878:7878/tcp
+    restart: always
+    volumes:
+      - ${HOMESERVERBASEPATH}/radarr:/config
+      - ${HOMESERVERDOWNLOADPATH}:/downloads
+      - ${HOMESERVERMOVIEPATH}:/movies
+  Sonarr:
+    container_name: Sonarr
+    entrypoint:
+      - /init
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=Atlantic/Reykjavik
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - HOME=/root
+      - LANGUAGE=en_US.UTF-8
+      - LANG=en_US.UTF-8
+      - TERM=xterm
+      - XDG_CONFIG_HOME=/config/xdg
+      - SONARR_BRANCH=master
+    hostname: sonarr
+    image: linuxserver/sonarr:latest
+    ipc: shareable
+    ports:
+      - 8989:8989/tcp
+    restart: always
+    volumes:
+      - ${HOMESERVERDOWNLOADPATH}:/downloads
+      - ${HOMESERVERTVPATH}:/tv
+      - ${HOMESERVERBASEPATH}/sonarr:/config
+      - /dev/rtc:/dev/rtc:ro
+  Tautulli:
+    container_name: Tautulli
+    entrypoint:
+      - /init
+    environment:
+      - PUID=1000
+      - PGOD=1000
+      - TZ=Atlantic/Reykjavik
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - 'PS1=$(whoami)@$(hostname):$(pwd)\$ '
+      - HOME=/root
+      - TERM=xterm
+      - TAUTULLI_DOCKER=True
+    hostname: tautulli
+    image: linuxserver/tautulli:latest
+    ipc: shareable
+    ports:
+      - 8181:8181/tcp
+    restart: always
+    volumes:
+      - ${HOMESERVERBASEPATH}/tautulli:/config
+      - ${HOMESERVERBASEPATH}/tautulli/logs:/logs
+  Transmission:
+    container_name: Transmission
+    entrypoint:
+      - /init
+    environment:
+      - TZ=Atlantic/Reykjavik
+      - PGID=1000
+      - PUID=1000
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - 'PS1=$(whoami)@$(hostname):$(pwd)\$ '
+      - HOME=/root
+      - TERM=xterm
+    hostname: transmission
+    image: linuxserver/transmission:latest
+    ipc: shareable
+    ports:
+      - 51413:51413/tcp
+      - 51413:51413/udp
+      - 9091:9091/tcp
+    restart: always
+    volumes:
+      - ${HOMESERVERBASEPATH}/transmission:/config
+      - ${HOMESERVERDOWNLOADPATH}:/downloads
+  nginx:
+    command:
+      - "nginx -g daemon off;"
+    container_name: nginx
+    entrypoint:
+      - /docker-entrypoint.sh
+    environment:
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - NGINX_VERSION=1.19.4
+      - NJS_VERSION=0.4.4
+      - PKG_RELEASE=1~buster
+    expose:
+      - 80/tcp
+    hostname: nginx
+    image: nginx:latest
+    ipc: private
+    restart: always
+    volumes:
+      - ${HOMESERVERBASEPATH}/nginx:/etc/nginx
+      - b81a0eb769a63fc54539b11c7cd24f9982f46a7239d9806d8957cc58e0e152ec:/usr/share/nginx/html
+      - /etc/ssl:/etc/ssl:ro
+  plex:
+    container_name: plex
+    entrypoint:
+      - /init
+    environment:
+      - TZ=Atlantic/Reykjavik
+      - PLEX_CLAIM=claim-G36xQRjPvPeRAybLSBnx
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - TERM=xterm
+      - LANG=C.UTF-8
+      - LC_ALL=C.UTF-8
+      - CHANGE_CONFIG_DIR_OWNERSHIP=true
+      - HOME=/config
+    hostname: plex
+    image: plexinc/pms-docker:latest
+    ipc: shareable
+    ports:
+      - 1900:1900/udp
+      - 3005:3005/tcp
+      - 32400:32400/tcp
+      - 32410:32410/udp
+      - 32412:32412/udp
+      - 32413:32413/udp
+      - 32414:32414/udp
+      - 32469:32469/tcp
+      - 8324:8324/tcp
+    restart: always
+    volumes:
+      - ${HOMESERVERMOVIEPATH}:/data/movies
+      - ${HOMESERVERTVPATH}:/data/tv
+      - ${HOMESERVERBASEPATH}/plex:/config
+  portainer:
+    container_name: portainer
+    entrypoint:
+      - /portainer
+    environment:
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    hostname: portainer
+    image: portainer/portainer
+    ipc: private
+    ports:
+      - 9000:9000/tcp
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${HOMESERVERBASEPATH}/portainer:/data
+    working_dir: /
+networks:
+  bridge:
+    external: true

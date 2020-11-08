@@ -161,26 +161,6 @@ services:
     volumes:
       - ${HOMESERVERBASEPATH}/transmission:/config
       - ${HOMESERVERDOWNLOADPATH}:/downloads
-  nginx:
-    command:
-      - "nginx -g daemon off;"
-    container_name: nginx
-    entrypoint:
-      - /docker-entrypoint.sh
-    environment:
-      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      - NGINX_VERSION=1.19.4
-      - NJS_VERSION=0.4.4
-      - PKG_RELEASE=1~buster
-    expose:
-      - 80/tcp
-    hostname: nginx
-    image: nginx:latest
-    ipc: private
-    restart: always
-    volumes:
-      - ${HOMESERVERBASEPATH}/nginx:/etc/nginx
-      - /etc/ssl:/etc/ssl:ro
   plex:
     container_name: plex
     entrypoint:
@@ -228,6 +208,23 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${HOMESERVERBASEPATH}/portainer:/data
     working_dir: /
-networks:
-  bridge:
-    external: true
+  nginx:
+    command:
+      - nginx -g "daemon off;"
+    container_name: nginx
+    entrypoint:
+      - /docker-entrypoint.sh
+    environment:
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - NGINX_VERSION=1.19.4
+      - NJS_VERSION=0.4.4
+      - PKG_RELEASE=1~buster
+    expose:
+      - 80/tcp
+    hostname: nginx
+    image: nginx:latest
+    ipc: private
+    restart: always
+    volumes:
+      - ${HOMESERVERBASEPATH}/nginx:/etc/nginx
+      - /etc/ssl:/etc/ssl:ro

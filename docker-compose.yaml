@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3"
 services:
   Heimdall:
     container_name: Heimdall
@@ -9,7 +9,7 @@ services:
       - PUID=1000
       - TZ=Atlantic/Reykjavik
       - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      - 'PS1=$(whoami)@$(hostname):$(pwd)\$ '
+      - PS1=$$(whoami)@$$(hostname):$$(pwd)
       - HOME=/root
       - TERM=xterm
       - S6_BEHAVIOUR_IF_STAGE2_FAILS=2
@@ -125,7 +125,7 @@ services:
       - PGOD=1000
       - TZ=Atlantic/Reykjavik
       - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      - 'PS1=$(whoami)@$(hostname):$(pwd)\$ '
+      - PS1=$$(whoami)@$$(hostname):$$(pwd)
       - HOME=/root
       - TERM=xterm
       - TAUTULLI_DOCKER=True
@@ -147,7 +147,7 @@ services:
       - PGID=1000
       - PUID=1000
       - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-      - 'PS1=$(whoami)@$(hostname):$(pwd)\$ '
+      - PS1=$$(whoami)@$$(hostname):$$(pwd)
       - HOME=/root
       - TERM=xterm
     hostname: transmission
@@ -180,7 +180,6 @@ services:
     restart: always
     volumes:
       - ${HOMESERVERBASEPATH}/nginx:/etc/nginx
-      - b81a0eb769a63fc54539b11c7cd24f9982f46a7239d9806d8957cc58e0e152ec:/usr/share/nginx/html
       - /etc/ssl:/etc/ssl:ro
   plex:
     container_name: plex

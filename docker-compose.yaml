@@ -209,8 +209,7 @@ services:
       - ${HOMESERVERBASEPATH}/portainer:/data
     working_dir: /
   nginx:
-    command:
-      - nginx -g "daemon off;"
+    command:  [nginx, '-g', 'daemon off;']
     container_name: nginx
     entrypoint:
       - /docker-entrypoint.sh

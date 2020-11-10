@@ -167,7 +167,7 @@ services:
       - /init
     environment:
       - TZ=Atlantic/Reykjavik
-      - PLEX_CLAIM=claim-G36xQRjPvPeRAybLSBnx
+      - PLEX_CLAIM=${PLEXCLAIM}
       - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       - TERM=xterm
       - LANG=C.UTF-8
@@ -211,8 +211,6 @@ services:
   nginx:
     command:  [nginx, '-g', 'daemon off;']
     container_name: nginx
-    entrypoint:
-      - /docker-entrypoint.sh
     environment:
       - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       - NGINX_VERSION=1.19.4

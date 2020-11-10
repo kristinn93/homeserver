@@ -13,7 +13,10 @@ Trying to simplify my current setup.
 
 Create a folder where all of the config for the docker images will be stored, something like `~/homserverconfig`
 
+Get your plex claim token ready from https://www.plex.tv/claim/
+
 ```bash
+export PLEXCLAIM="claim-xxxxx"
 export HOMESERVERBASEPATH="~/homeserverconfig"
 export HOMESERVERDOWNLOADPATH="/mnt/media/downloads"
 export HOMESERVERMEDIAPATH="/mnt/media"

@@ -1,7 +1,7 @@
 version: "3"
 services:
-  Heimdall:
-    container_name: Heimdall
+  heimdall:
+    container_name: heimdall
     entrypoint:
       - /init
     environment:
@@ -17,12 +17,12 @@ services:
     image: linuxserver/heimdall:latest
     ipc: shareable
     ports:
-      - 8442:80/tcp
+      - 8442:8442/tcp
     restart: always
     volumes:
       - ${HOMESERVERBASEPATH}/heimdall/config:/config
-  Jackett:
-    container_name: Jackett
+  jackett:
+    container_name: jackett
     entrypoint:
       - /init
     environment:
@@ -45,8 +45,8 @@ services:
     volumes:
       - ${HOMESERVERBASEPATH}/jackett:/config
       - ${HOMESERVERDOWNLOADPATH}:/downloads
-  Ombi:
-    container_name: Ombi
+  ombi:
+    container_name: ombi
     entrypoint:
       - /init
     environment:
@@ -66,8 +66,8 @@ services:
     restart: always
     volumes:
       - ${HOMESERVERBASEPATH}/ombi:/config
-  Radarr:
-    container_name: Radarr
+  radarr:
+    container_name: radarr
     entrypoint:
       - /init
     environment:
@@ -90,8 +90,8 @@ services:
       - ${HOMESERVERBASEPATH}/radarr:/config
       - ${HOMESERVERDOWNLOADPATH}:/downloads
       - ${HOMESERVERMOVIEPATH}:/movies
-  Sonarr:
-    container_name: Sonarr
+  sonarr:
+    container_name: sonarr
     entrypoint:
       - /init
     environment:
@@ -116,8 +116,8 @@ services:
       - ${HOMESERVERTVPATH}:/tv
       - ${HOMESERVERBASEPATH}/sonarr:/config
       - /dev/rtc:/dev/rtc:ro
-  Tautulli:
-    container_name: Tautulli
+  tautulli:
+    container_name: tautulli
     entrypoint:
       - /init
     environment:
@@ -138,8 +138,8 @@ services:
     volumes:
       - ${HOMESERVERBASEPATH}/tautulli:/config
       - ${HOMESERVERBASEPATH}/tautulli/logs:/logs
-  Transmission:
-    container_name: Transmission
+  transmission:
+    container_name: transmission
     entrypoint:
       - /init
     environment:
@@ -216,8 +216,9 @@ services:
       - NGINX_VERSION=1.19.4
       - NJS_VERSION=0.4.4
       - PKG_RELEASE=1~buster
-    expose:
-      - 80/tcp
+    ports:
+      - 4443:4443
+      - 81:81
     hostname: nginx
     image: nginx:latest
     ipc: private

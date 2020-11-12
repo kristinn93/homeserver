@@ -223,6 +223,7 @@ services:
     image: nginx:latest
     ipc: private
     restart: always
+    network_mode: host
     volumes:
       - ${HOMESERVERBASEPATH}/nginx:/etc/nginx
       - /etc/ssl:/etc/ssl:ro

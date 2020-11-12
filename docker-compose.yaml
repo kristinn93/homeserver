@@ -225,3 +225,12 @@ services:
     volumes:
       - ${HOMESERVERBASEPATH}/nginx:/etc/nginx
       - /etc/ssl:/etc/ssl:ro
+  hassio:
+    container_name: hassio
+    restart: always
+    network_mode: host
+    volumes:
+      - ${HOMESERVERBASEPATH}/hassio:/config
+      - /etc/localtime:/etc/localtime:ro
+    image: homeassistant/home-assistant:stable
+    hostname: hassio
